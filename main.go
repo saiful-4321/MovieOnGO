@@ -1,6 +1,12 @@
 package main
 
-import "github.com/gorilla/mux"
+import (
+	"fmt"
+	"log"
+	"net/http"
+
+	"github.com/gorilla/mux"
+)
 
 type Movie struct {
 	ID       string    `json:"id"`
@@ -18,9 +24,24 @@ var movies []Movie
 
 func main() {
 	r := mux.NewRouter()
+
+	// initiate seeder data
+	insertMovieSeeder()
+
 	r.HandleFunc("/movies", GetMovies).Methods("GET")
 	r.HandleFunc("/movies/{id}", GetMovie).Methods("GET")
 	r.HandleFunc("/movie", CreateMovie).Methods("POST")
 	r.HandleFunc("/movie/{id}", UpdateMovie).Methods("PUT")
 	r.HandleFunc("/movie/{id}", DeleteMovie).Methods("DELETE")
+
+	fmt.Printf("starting server at port 8000\n")
+	log.Fatal(http.ListenAndServe(":8000", r))
+}
+
+func insertMovieSeeder() {
+	movies = append(movies, Movie{ID: "1", Isbn: "4321", Title: "dark-night", Director: &Director{Name: "Saiful Islam", Position: "Head dir"}})
+	movies = append(movies, Movie{ID: "2", Isbn: "1234", Title: "purple-night", Director: &Director{Name: "Saiful Islam", Position: "Head dir"}})
+	movies = append(movies, Movie{ID: "3", Isbn: "1122", Title: "Geen-night", Director: &Director{Name: "Samim Islam", Position: "Sub dir"}})
+	movies = append(movies, Movie{ID: "4", Isbn: "5544", Title: "Purple-night", Director: &Director{Name: "Nusaifa Islam", Position: "OOP dir"}})
+	movies = append(movies, Movie{ID: "5", Isbn: "5566", Title: "totle-night", Director: &Director{Name: "Kona Islam", Position: "DDR dir"}})
 }
