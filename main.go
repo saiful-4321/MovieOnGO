@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -44,4 +45,9 @@ func insertMovieSeeder() {
 	movies = append(movies, Movie{ID: "3", Isbn: "1122", Title: "Geen-night", Director: &Director{Name: "Samim Islam", Position: "Sub dir"}})
 	movies = append(movies, Movie{ID: "4", Isbn: "5544", Title: "Purple-night", Director: &Director{Name: "Nusaifa Islam", Position: "OOP dir"}})
 	movies = append(movies, Movie{ID: "5", Isbn: "5566", Title: "totle-night", Director: &Director{Name: "Kona Islam", Position: "DDR dir"}})
+}
+
+func GetMovies(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(movies)
 }
