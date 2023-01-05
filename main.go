@@ -88,3 +88,21 @@ func CreateMovie(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(movie)
 }
+
+func UpdateMovie(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/header")
+	params := mux.Vars(r)
+
+	for index, item := range movies {
+		if item.ID == params["id"] {
+			movies = append(movies[:index], movies[index+1:]...)
+			var movie Movie
+			_ = json.NewDecoder(r.Body).Decode(&movie)
+			movie.ID = params["id"]
+			movies = append(movies, movie)
+
+			json.NewEncoder(w).Encode(movie)
+			return
+		}
+	}
+}
